@@ -1,0 +1,38 @@
+import os
+import cv2
+import random
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+train = pd.read_csv('/kaggle/input/handwriting-recognition/written_name_train_v2.csv')
+train.head()
+train.info()
+train.describe()
+train.isnull()
+train.isnull().sum()
+plt.figure(figsize=(15, 10))
+
+for i in range(6):
+    ax = plt.subplot(2, 3, i+1)
+    img_dir = '/kaggle/input/handwriting-recognition/train_v2/train/'+train.loc[i, 'FILENAME']
+    image = cv2.imread(img_dir, cv2.IMREAD_GRAYSCALE)
+    plt.imshow(image, cmap = 'gray')
+    plt.title(train.loc[i, 'IDENTITY'], fontsize=12)
+    plt.axis('off')
+
+plt.subplots_adjust(wspace=0.2, hspace=-0.8)
+print("Number of NaNs in train set      : ", train['IDENTITY'].isnull().sum())
+unreadable = train[train['IDENTITY'] == 'UNREADABLE']
+unreadable.reset_index(inplace = True, drop=True)
+
+plt.figure(figsize=(15, 10))
+
+for i in range(6):
+    ax = plt.subplot(2, 3, i+1)
+    img_dir = '/kaggle/input/handwriting-recognition/train_v2/train/'+unreadable.loc[i, 'FILENAME']
+    image = cv2.imread(img_dir, cv2.IMREAD_GRAYSCALE)
+    plt.imshow(image, cmap = 'gray')
+    plt.title(unreadable.loc[i, 'IDENTITY'], fontsize=12)
+    plt.axis('off')
+
+plt.subplots_adjust(wspace=0.2, hspace=-0.8)
